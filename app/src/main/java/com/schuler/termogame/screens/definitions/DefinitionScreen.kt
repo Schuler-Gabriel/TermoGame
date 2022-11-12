@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIos
 import androidx.compose.runtime.*
@@ -14,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.schuler.termogame.R
 import com.schuler.termogame.components.HomeMenuButton
 import com.schuler.termogame.navigation.AppScreens
@@ -24,10 +25,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun DefinitionScreen(homeViewModel: HomeViewModel, navController: NavController) {
-    Scaffold(
-        topBar = {
+fun DefinitionScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
+    Scaffold{
+        Column{
             TopAppBar(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp)
+                    .height(70.dp)
+                    .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colors.background,
                 elevation = 0.dp,
             ) {
@@ -62,9 +67,9 @@ fun DefinitionScreen(homeViewModel: HomeViewModel, navController: NavController)
                     Box() {}
                 }
             }
+            DefinitionsContent(homeViewModel)
         }
-    ) {
-        DefinitionsContent(homeViewModel)
+
     }
 }
 
@@ -81,18 +86,19 @@ fun DefinitionsContent(homeViewModel: HomeViewModel){
         Column (
             modifier = Modifier
                 .padding(vertical = 10.dp)
-        ){
+        ) {
             Text(
-                modifier = Modifier.padding(horizontal = 30.dp),
+                modifier = Modifier.padding(horizontal = 15.dp),
                 text = "Dificuldade:",
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.onSurface
             )
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 30.dp)
+                    .fillMaxSize()
+                    .padding(horizontal = 10.dp)
                     .padding(top = 30.dp),
             ) {
                 HomeMenuButton(
@@ -105,7 +111,8 @@ fun DefinitionsContent(homeViewModel: HomeViewModel){
                     textColor = if (difficulty.value == 1) MaterialTheme.colors.secondary
                     else MaterialTheme.colors.onSurface,
 
-                    width = 100.dp
+                    maxWidth = true,
+                    height = 60.dp
                 ) {
                     homeViewModel.saveDifficulty(1)
                 }
@@ -119,13 +126,15 @@ fun DefinitionsContent(homeViewModel: HomeViewModel){
                     textColor = if (difficulty.value == 2) MaterialTheme.colors.secondary
                     else MaterialTheme.colors.onSurface,
 
-                    width = 100.dp
+                    maxWidth = true,
+                    height = 60.dp
                 ) {
                     homeViewModel.saveDifficulty(2)
                 }
                 HomeMenuButton(
-                    label = "Difício",
+                    label = "Difícil",
                     style = MaterialTheme.typography.caption,
+
 
                     borderColor = if (difficulty.value == 3) MaterialTheme.colors.secondary
                     else MaterialTheme.colors.onSurface,
@@ -133,14 +142,15 @@ fun DefinitionsContent(homeViewModel: HomeViewModel){
                     textColor = if (difficulty.value == 3) MaterialTheme.colors.secondary
                     else MaterialTheme.colors.onSurface,
 
-                    width = 100.dp
+                    maxWidth = true,
+                    height = 60.dp
                 ) {
                     homeViewModel.saveDifficulty(3)
                 }
+                Spacer(modifier = Modifier.height(350.dp))
             }
+
         }
-
-
 
     }
 }

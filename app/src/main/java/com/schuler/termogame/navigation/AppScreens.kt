@@ -1,6 +1,7 @@
 package com.schuler.termogame.navigation
 
 enum class AppScreens {
+    SplashScreen,
     HomeScreen,
     PlayScreen,
     DefinitionScreen,
@@ -8,6 +9,7 @@ enum class AppScreens {
     companion object {
         fun fromRoute(route: String?): AppScreens
                 = when (route?.substringBefore("/")){
+            SplashScreen.name -> SplashScreen
             HomeScreen.name -> HomeScreen
             PlayScreen.name -> PlayScreen
             StatsScreen.name -> StatsScreen

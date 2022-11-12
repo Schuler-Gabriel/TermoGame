@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 fun Keyboard (
     modifier: Modifier = Modifier,
     wordCheckHandler: () -> Unit,
+    alphabet: Map<String, Int>,
     press: (String) -> Unit
 ) {
     val lettersList = listOf(
@@ -40,7 +41,7 @@ fun Keyboard (
                 horizontalArrangement = Arrangement.Center
             ){
                 for (i in lettersList.slice(0..9)){
-                    KeyButton(key = i) {
+                    KeyButton(key = i, alphabet) {
                         press(i)
                     }
                 }
@@ -52,7 +53,7 @@ fun Keyboard (
                 horizontalArrangement = Arrangement.Center
             ){
                 for (i in lettersList.slice(10..18)){
-                    KeyButton(key = i) {
+                    KeyButton(key = i, alphabet) {
                         press(i)
                     }
                 }
@@ -64,7 +65,7 @@ fun Keyboard (
                 horizontalArrangement = Arrangement.Center
             ){
                 for (i in lettersList.slice(19..26)){
-                    KeyButton(key = i) {
+                    KeyButton(key = i, alphabet) {
                         press(i)
                     }
                 }
@@ -118,19 +119,24 @@ fun SendButton(
 @Composable
 fun KeyButton(
     key: String,
+    alphabet: Map<String, Int>,
     press: () -> Unit
 ){
     Card(
         modifier = Modifier
             .padding(start = (if (key == "back") 10.dp else 5.dp))
-            .width(if (key == "back") 45.dp else 30.dp)
+            .width(if (key == "back") 43.dp else 28.dp)
             .height(40.dp)
-            .border(
-                border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
-                shape = RoundedCornerShape(10.dp)
-            )
+
             .clickable { press() },
-        backgroundColor = MaterialTheme.colors.onBackground,
+        backgroundColor = when(alphabet[key]) {
+            0 -> MaterialTheme.colors.background
+            1 -> MaterialTheme.colors.error
+            2 -> MaterialTheme.colors.secondaryVariant
+            10 -> MaterialTheme.colors.onBackground
+            else -> {MaterialTheme.colors.onBackground}
+        },
+        border = BorderStroke(2.dp,  if(alphabet[key] == 0) MaterialTheme.colors.onBackground else Color.Transparent),
         shape = RoundedCornerShape(10.dp),
     ) {
         Box(

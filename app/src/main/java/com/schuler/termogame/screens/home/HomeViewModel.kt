@@ -2,10 +2,12 @@ package com.schuler.termogame.screens.home
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.input.key.Key.Companion.G
+import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.schuler.termogame.dataStore.readInt
 import com.schuler.termogame.dataStore.writeInt
@@ -14,11 +16,13 @@ import com.schuler.termogame.model.Word
 import com.schuler.termogame.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 
 @HiltViewModel
@@ -35,10 +39,12 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
     val randomWord = _randomWord.asStateFlow()
 
     private val _searchedWordExistes = MutableStateFlow<Boolean>(false)
-    val searchedWordExistes = _searchedWordExistes.asStateFlow()
 
+    var wordDialogRight = mutableStateOf(false)
 
-    var activeField = mutableStateOf("0")
+    var wordDialogWrong = mutableStateOf(false)
+
+    var activeField = mutableStateOf(0)
 
     var activeLine = mutableStateOf(0)
 
@@ -49,7 +55,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
             mutableStateListOf("","","","",""),
             mutableStateListOf("","","","",""),
             mutableStateListOf("","","","",""),
-        )
+    )
 
     var matchingLetterState = mutableStateListOf(
             mutableStateListOf(0,0,0,0,0),
@@ -58,7 +64,35 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
             mutableStateListOf(0,0,0,0,0),
             mutableStateListOf(0,0,0,0,0),
             mutableStateListOf(0,0,0,0,0),
-        )
+    )
+    var alphabet = mutableStateMapOf<String, Int>(
+        "A" to 10,
+        "B" to 10,
+        "C" to 10,
+        "D" to 10,
+        "E" to 10,
+        "F" to 10,
+        "G" to 10,
+        "H" to 10,
+        "I" to 10,
+        "J" to 10,
+        "K" to 10,
+        "L" to 10,
+        "M" to 10,
+        "N" to 10,
+        "O" to 10,
+        "P" to 10,
+        "Q" to 10,
+        "R" to 10,
+        "S" to 10,
+        "T" to 10,
+        "U" to 10,
+        "V" to 10,
+        "W" to 10,
+        "X" to 10,
+        "Y" to 10,
+        "Z" to 10,
+    )
 
 
 
@@ -76,10 +110,11 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         viewModelScope.launch(Dispatchers.IO) {
             appContext.writeInt(KEY_NAME, diff)
             _difficulty.value = diff
+            reset()
 
             when (_difficulty.value) {
                 1 -> {
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(300000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -90,7 +125,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 2 -> {
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(60000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -101,7 +136,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 3 ->{
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(4000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -175,57 +210,145 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
     //Functions
 
-    fun reset(){
+    private fun reset(){
+
         for (l in 0..5){
             for (j in 0..4){
                 wordList[l][j] = ""
                 matchingLetterState[l][j]= 0
             }
         }
+        alphabet = mutableStateMapOf(
+            "A" to 10,
+            "B" to 10,
+            "C" to 10,
+            "D" to 10,
+            "E" to 10,
+            "F" to 10,
+            "G" to 10,
+            "H" to 10,
+            "I" to 10,
+            "J" to 10,
+            "K" to 10,
+            "L" to 10,
+            "M" to 10,
+            "N" to 10,
+            "O" to 10,
+            "P" to 10,
+            "Q" to 10,
+            "R" to 10,
+            "S" to 10,
+            "T" to 10,
+            "U" to 10,
+            "V" to 10,
+            "W" to 10,
+            "X" to 10,
+            "Y" to 10,
+            "Z" to 10,
+        )
         changeRandomWord()
-        activeField.value = "0"
+        activeField.value = 0
         activeLine.value = 0
+        wordDialogRight.value = false
+        wordDialogWrong.value = false
     }
 
 
-    fun formingWord(list: List<String>): String{
+    private fun formingWord(list: List<String>): String{
         var word = ""
         for (i in list){
             word += i
         }
         return word
     }
-    suspend fun onSendWord(){
 
+
+
+
+    private fun duplicatedLetterWordList(name: String): MutableMap<String, Int> {
+        var numberOfRepetitions = mutableListOf(0,0,0,0,0)
+        for (i in 0..4){
+            for (j in 0..4){
+                if (name[i] == name[j]){
+                    numberOfRepetitions[i]++
+                }
+            }
+        }
+        var list = mutableMapOf<String, Int>()
+        for (i in 0..4){
+            list[name[i].toString()] = numberOfRepetitions[i]
+        }
+
+        var repeatedLetters = list.keys.distinct().toList()
+
+
+        var dictionary = mutableMapOf<String, Int>()
+        for (i in repeatedLetters.indices){
+            dictionary[repeatedLetters[i]] = list[repeatedLetters[i]]!!
+
+        }
+
+
+        return dictionary
+    }
+
+    fun wordDialogFunction(){
+        reset()
     }
 
 
-    fun wordCheckHandler(){
+
+        fun wordCheckHandler(snackbarHostState: SnackbarHostState){
+            val wordFormed = formingWord(wordList[activeLine.value])
+
         viewModelScope.launch(Dispatchers.IO){
-            repository.getWordsByNoAccentName(formingWord(wordList[activeLine.value])).distinctUntilChanged()
+            repository.getWordsByNoAccentName(wordFormed).distinctUntilChanged()
                 .collect{word ->
                     if(word == null){
+                            snackbarHostState.showSnackbar(
+                                message = "Desculpe, essa palavra não existe em nosso banco de dados",
+                                actionLabel = "OK",
+                                duration = SnackbarDuration.Short
+                            )
                         println("nao existe a palavra: " + _searchedWordExistes.value)
                     } else {
                         println(word)
-                            if (formingWord(wordList[activeLine.value]) == _randomWord.value.noAccentName){
-                                reset()
+                            if (wordFormed == _randomWord.value.noAccentName){
+                                wordDialogRight.value = true
                             } else {
+
                                 if (activeLine.value < 5) {
+                                    var repetitionsOfLetters = duplicatedLetterWordList(_randomWord.value.noAccentName)
+
                                     for (i in 0..4){
-                                        if(formingWord(wordList[activeLine.value])[i] in _randomWord.value.noAccentName){
-                                            if(formingWord(wordList[activeLine.value])[i] == _randomWord.value.noAccentName[i]){
-                                                matchingLetterState[activeLine.value][i] = 2
-                                            } else {
-                                                matchingLetterState[activeLine.value][i] = 1
-                                            }
+                                        if (wordFormed[i] == _randomWord.value.noAccentName[i]){
+                                            matchingLetterState[activeLine.value][i] = 2
+                                            alphabet[wordFormed[i].toString()] = 2
+                                            repetitionsOfLetters[wordFormed[i].toString()] = repetitionsOfLetters[wordFormed[i].toString()]!! - 1
                                         }
                                     }
+                                    for (i in 0..4){
+                                        if (wordFormed[i]in _randomWord.value.noAccentName){
+                                           if(
+                                               (repetitionsOfLetters[wordFormed[i].toString()]!! > 0) &&
+                                               (matchingLetterState[activeLine.value][i] != 2)
+                                           ){
+                                               matchingLetterState[activeLine.value][i] = 1
+                                               alphabet[wordFormed[i].toString()] = 1
+                                               repetitionsOfLetters[wordFormed[i].toString()] = repetitionsOfLetters[wordFormed[i].toString()]!! - 1
+                                           }
+                                        } else {
+                                            alphabet[wordFormed[i].toString()] = 0
+                                        }
+                                    }
+
+                                    for (i in 0..4){
+                                        wordList[ activeLine.value][i] = word.name[i].toString()
+                                    }
                                     activeLine.value++
-                                    activeField.value = "0"
-                                } else {
-                                    reset()
-                                    println("esgotou as 6 tentativas")
+                                    activeField.value = 0
+                                } else{
+                                    wordDialogWrong.value = true
                                 }
                             }
 
@@ -269,7 +392,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         }
   }
 
-    fun changeRandomWord() {
+    private fun changeRandomWord() {
         viewModelScope.launch(Dispatchers.IO){
             when (_difficulty.value) {
                 1 -> {

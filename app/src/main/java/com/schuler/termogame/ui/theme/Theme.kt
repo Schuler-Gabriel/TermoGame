@@ -6,9 +6,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.input.key.Key.Companion.W
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
@@ -20,7 +17,7 @@ private val DarkColorPalette = darkColors(
     background = DarkGrey,
     onBackground = Grey,
     onSurface = LightGrey,
-    error = TransparentOrage,
+    error = TransparentOrange,
 
 )
 
@@ -33,7 +30,7 @@ private val LightColorPalette = lightColors(
     background = DarkGrey,
     onBackground = Grey,
     onSurface = LightGrey,
-    error = TransparentOrage,
+    error = TransparentOrange,
 
     /* Other default colors to override
     background = Color.White,

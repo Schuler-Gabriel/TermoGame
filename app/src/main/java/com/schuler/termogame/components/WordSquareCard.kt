@@ -2,6 +2,7 @@ package com.schuler.termogame.components
 
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,21 +10,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun WordSquareCard(
     modifier: Modifier = Modifier,
-    activeField: String,
+    activeField: Int,
     wordList: List<String>,
     matchingLetterState: List<Int>,
-    lineNumber: String,
-    activeLine: String,
+    lineNumber: Int,
+    activeLine: Int,
     activeFieldChange: (Int) -> Unit
 ){
 
@@ -39,7 +42,7 @@ fun WordSquareCard(
                 letter = wordList[i],
                 letterState = matchingLetterState[i],
                 activeField,
-                fieldNumber = i.toString(),
+                fieldNumber = i,
                 isActiveLine = lineNumber == activeLine
             ) {
                 activeFieldChange(i)
@@ -53,8 +56,8 @@ fun WordSquareCard(
 fun LetterField(
     letter: String,
     letterState: Int,
-    isActive: String,
-    fieldNumber: String,
+    isActive: Int,
+    fieldNumber: Int,
     isActiveLine: Boolean,
     onValueChange: () -> Unit
 ){
@@ -63,32 +66,37 @@ fun LetterField(
     Card(
         modifier = Modifier
             .padding(start = 5.dp)
-            .width(65.dp)
-            .height(65.dp)
-            .border(
-                border = BorderStroke(
-                    if (isActive == fieldNumber && isActiveLine ) {
-                        4.dp
-                    } else {
-                        2.dp
-                    },
-
-                    if (isActive == fieldNumber && isActiveLine)  {
-                        MaterialTheme.colors.onPrimary
-                    } else {
-                        MaterialTheme.colors.onBackground
-                    }
-                ),
-                shape = RoundedCornerShape(10.dp)
-            )
+            .size(58.dp)
             .clickable(
                 enabled = isActiveLine,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
-            ) { onValueChange() }
-        ,
+            ) { onValueChange() },
+        border = BorderStroke(
+            if (isActiveLine) {
+                if (isActive == fieldNumber) {
+                    4.dp
+                } else {
+                    2.dp
+                }
+            }else {
+                0.dp
+            },
+            if (isActiveLine) {
+
+                if (isActive == fieldNumber) {
+                    MaterialTheme.colors.onPrimary
+                } else {
+                    MaterialTheme.colors.onBackground
+                }
+            }else{
+                Color.Transparent
+            }
+        ),
         shape = RoundedCornerShape(10.dp),
-        backgroundColor = if (isActiveLine) {
+        elevation = 0.dp,
+        backgroundColor =
+        if (isActiveLine) {
             MaterialTheme.colors.background
         } else {
             if(letterState != 0 ){
@@ -100,9 +108,6 @@ fun LetterField(
             }else{
                 MaterialTheme.colors.onBackground
             }
-
-
-
         }
     ) {
         Box(

@@ -23,7 +23,7 @@ interface AppDatabaseDao {
     @Query("SELECT * from words_table where word_name =:name")
     suspend fun getWordsByName(name: String): Word
 
-    @Query("SELECT * from words_table where word_name =:noAccentName")
+    @Query("SELECT * from words_table where word_no_accent_name =:noAccentName")
     fun getWordsByNoAccentName(noAccentName: String): Flow<Word>
 
     @Query("SELECT * FROM words_table WHERE word_tf >:tf ORDER BY RANDOM() LIMIT 1")

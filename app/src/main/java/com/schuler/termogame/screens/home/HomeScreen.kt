@@ -21,8 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.navigation.NavController
-
-
+import androidx.navigation.NavHostController
 import com.schuler.termogame.R
 import com.schuler.termogame.navigation.AppScreens
 import com.schuler.termogame.components.HomeMenuButton
@@ -33,7 +32,7 @@ import kotlinx.coroutines.withContext
 
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavHostController){
 
     Scaffold(
         topBar = {
@@ -57,7 +56,7 @@ fun HomeScreen(navController: NavController){
 }
 @Composable
 fun MainContent(
-    navController: NavController,
+    navController: NavHostController,
 ) {
     Surface(
         modifier = Modifier
@@ -76,16 +75,14 @@ fun MainContent(
                 elevation = 0.dp,
             ) {
                 Image(
-                    painterResource(id = R.drawable.ic_new_name_logo),
+                    painterResource(id = R.drawable.ic_name_logo_g),
                     contentDescription = "Termo Logo",
                     contentScale = ContentScale.Fit
                 )
             }
 
             Column(
-                modifier = Modifier
-                    .padding(bottom = 70.dp)
-                    .fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -104,6 +101,8 @@ fun MainContent(
                 }
 
             }
+            Spacer(modifier = Modifier.height(120.dp))
+
         }
 
     }
