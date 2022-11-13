@@ -64,13 +64,11 @@ fun MainContent(
         color = MaterialTheme.colors.background
     ) {
         Column (
-            modifier = Modifier
-                .padding(bottom = 0.dp),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Card(
-                modifier = Modifier.size(250.dp),
+                modifier = Modifier.size(250.dp).padding(top = 20.dp),
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
             ) {

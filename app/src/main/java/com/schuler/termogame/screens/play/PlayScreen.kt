@@ -94,15 +94,18 @@ fun GameContent(
                             tint = MaterialTheme.colors.onBackground
                         )
                     }
+                    Box(
+                        modifier = Modifier.width( 200.dp),
+                        contentAlignment = Alignment.Center
 
-                    Image(
-                        painterResource(id = R.drawable.ic_header_logo),
-                        contentDescription = "Termo Logo",
-                        modifier = Modifier.padding(end = 27.dp),
-                        contentScale = ContentScale.Fit
-                    )
-
-                    Box() {}
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.ic_header_logo),
+                            contentDescription = "Termo Logo",
+                            contentScale = ContentScale.Fit
+                        )
+                    }
+                    Box(){}
                 }
             }
 
@@ -166,7 +169,6 @@ fun GameContent(
             }
         }
     }
-    val density = LocalDensity.current
     AnimatedVisibility(
         visible = homeViewModel.wordDialogRight.value,
         enter = slideInVertically(initialOffsetY = { 2000 }) + fadeIn(),

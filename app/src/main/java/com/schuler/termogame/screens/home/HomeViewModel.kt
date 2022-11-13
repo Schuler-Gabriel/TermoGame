@@ -114,7 +114,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
             when (_difficulty.value) {
                 1 -> {
-                    repository.getRandomWord(300000).distinctUntilChanged()
+                    repository.getRandomWord(93000000 ,97000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -125,7 +125,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 2 -> {
-                    repository.getRandomWord(60000).distinctUntilChanged()
+                    repository.getRandomWord(450000,45000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -136,7 +136,18 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 3 ->{
-                    repository.getRandomWord(4000).distinctUntilChanged()
+                    repository.getRandomWord(50000,3000).distinctUntilChanged()
+                        .collect{word ->
+                            println(word)
+                            if(word == null){
+                                Log.d("Empty", ": Difficulty Empty")
+                            } else {
+                                _randomWord.value = word
+                            }
+                        }
+                }
+                4 ->{
+                    repository.getRandomWord(93000000,9900).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -160,17 +171,17 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                     if(diff == null){
                         Log.d("Empty", ": Difficulty Empty")
                     } else {
-                        if(diff == 1 || diff == 2 || diff == 3){
+                        if(diff == 1 || diff == 2 || diff == 3 || diff == 4){
                             _difficulty.value = diff
 
                         } else {
-                            appContext.writeInt("difficulty", 2)
-                            _difficulty.value = 2
+                            appContext.writeInt("difficulty", 4)
+                            _difficulty.value = 4
                         }
 
                         when (diff) {
                             1 -> {
-                                repository.getRandomWord(100000).distinctUntilChanged()
+                                repository.getRandomWord(93000000 ,97000).distinctUntilChanged()
                                     .collect{word ->
                                         println(word)
                                         if(word == null){
@@ -181,7 +192,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                                     }
                             }
                             2 -> {
-                                repository.getRandomWord(100000).distinctUntilChanged()
+                                repository.getRandomWord(450000,45000).distinctUntilChanged()
                                     .collect{word ->
                                         println(word)
                                         if(word == null){
@@ -192,7 +203,18 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                                     }
                             }
                             3 ->{
-                                repository.getRandomWord(100000).distinctUntilChanged()
+                                repository.getRandomWord(50000,3000).distinctUntilChanged()
+                                    .collect{word ->
+                                        println(word)
+                                        if(word == null){
+                                            Log.d("Empty", ": Difficulty Empty")
+                                        } else {
+                                            _randomWord.value = word
+                                        }
+                                    }
+                            }
+                            4 ->{
+                                repository.getRandomWord(93000000,9900).distinctUntilChanged()
                                     .collect{word ->
                                         println(word)
                                         if(word == null){
@@ -396,7 +418,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         viewModelScope.launch(Dispatchers.IO){
             when (_difficulty.value) {
                 1 -> {
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(93000000 ,97000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -407,7 +429,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 2 -> {
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(450000,45000).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){
@@ -418,7 +440,18 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                         }
                 }
                 3 ->{
-                    repository.getRandomWord(100000).distinctUntilChanged()
+                    repository.getRandomWord(50000,3000).distinctUntilChanged()
+                        .collect{word ->
+                            println(word)
+                            if(word == null){
+                                Log.d("Empty", ": Difficulty Empty")
+                            } else {
+                                _randomWord.value = word
+                            }
+                        }
+                }
+                4 ->{
+                    repository.getRandomWord(93000000,9900).distinctUntilChanged()
                         .collect{word ->
                             println(word)
                             if(word == null){

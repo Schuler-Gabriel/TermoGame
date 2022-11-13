@@ -26,8 +26,8 @@ interface AppDatabaseDao {
     @Query("SELECT * from words_table where word_no_accent_name =:noAccentName")
     fun getWordsByNoAccentName(noAccentName: String): Flow<Word>
 
-    @Query("SELECT * FROM words_table WHERE word_tf >:tf ORDER BY RANDOM() LIMIT 1")
-    fun getRandomWord(tf: Int): Flow<Word>
+    @Query("SELECT * FROM words_table WHERE word_tf < :tfTop AND word_tf >:tfBottom ORDER BY RANDOM() LIMIT 1")
+    fun getRandomWord(tfTop: Int, tfBottom: Int): Flow<Word>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWord(word: Word)

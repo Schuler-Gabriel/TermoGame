@@ -20,8 +20,8 @@ class AppRepository @Inject constructor(
     suspend fun insertW(word: Word) = appDatabaseDao.insertWord(word)
     suspend fun update(word: Word) = appDatabaseDao.updateWord(word)
 
-    fun getRandomWord(tf: Int) = appDatabaseDao
-        .getRandomWord(tf)
+    fun getRandomWord(tfTop: Int, tfBottom: Int) = appDatabaseDao
+        .getRandomWord(tfTop, tfBottom)
         .flowOn(Dispatchers.IO)
         .conflate()
 

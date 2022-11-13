@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -34,7 +35,7 @@ fun DialogWord (homeViewModel: HomeViewModel, type: Boolean){
 
             Card(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
                     .border(4.dp, color, RoundedCornerShape(20.dp))
                     .height(300.dp)
                     .fillMaxWidth(),
