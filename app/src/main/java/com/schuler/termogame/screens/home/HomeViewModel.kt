@@ -166,6 +166,15 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
     //When criate
     init {
         viewModelScope.launch(Dispatchers.IO){
+            repository.getGameData().distinctUntilChanged()
+                .collect{gameData ->
+                    if(gameData == null){
+                        Log.d("Empty", ": Difficulty Empty")
+                    } else {
+                        _gameDataList.value = gameData
+                    }
+                }
+
             getDifficulty.distinctUntilChanged()
                 .collect {diff ->
                     if(diff == null){
@@ -273,6 +282,18 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         activeLine.value = 0
         wordDialogRight.value = false
         wordDialogWrong.value = false
+    }
+    fun getGameData(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getGameData().distinctUntilChanged()
+                .collect { gameData ->
+                    if (gameData == null) {
+                        Log.d("Empty", ": Difficulty Empty")
+                    } else {
+                        _gameDataList.value = gameData
+                    }
+                }
+        }
     }
 
 

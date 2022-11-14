@@ -93,6 +93,11 @@ fun MainContent(
                     navController.navigate(AppScreens.PlayScreen.name)
                 }
                 HomeMenuButton(
+                    label = "Estatísticas",
+                ){
+                    navController.navigate(AppScreens.StatsScreen.name)
+                }
+                HomeMenuButton(
                     label = "Definições",
                 ){
                     navController.navigate(AppScreens.DefinitionScreen.name)

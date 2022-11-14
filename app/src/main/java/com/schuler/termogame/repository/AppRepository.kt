@@ -39,6 +39,12 @@ class AppRepository @Inject constructor(
 
 
 //  GameData Table
+
+    fun getGameData() = appDatabaseDao
+        .getGameData()
+        .flowOn(Dispatchers.IO)
+        .conflate()
+
     suspend fun getGameDataByDificulty(difficulty: Int) = appDatabaseDao.getGameDataByDifficulty(difficulty)
     suspend fun insertGameData(gameData: GameData) = appDatabaseDao.insertGameData(gameData)
 
