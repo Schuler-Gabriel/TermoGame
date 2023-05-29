@@ -23,6 +23,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.schuler.termogame.R
+import com.schuler.termogame.components.AdaptiveBanner
 import com.schuler.termogame.navigation.AppScreens
 import com.schuler.termogame.components.HomeMenuButton
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +50,11 @@ fun HomeScreen(navController: NavHostController){
 
                 ) {}
             }
+        },
+        bottomBar = {
+            BottomAppBar() {
+                AdaptiveBanner("ca-app-pub-3940256099942544/6300978111")
+            }
         }
     ){
         MainContent(navController = navController)
@@ -64,11 +70,13 @@ fun MainContent(
         color = MaterialTheme.colors.background
     ) {
         Column (
-            verticalArrangement = Arrangement.SpaceAround,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Card(
-                modifier = Modifier.size(250.dp).padding(top = 20.dp),
+                modifier = Modifier
+                    .size(250.dp)
+                    .padding(top = 20.dp),
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
             ) {
@@ -97,10 +105,8 @@ fun MainContent(
                 ){
                     navController.navigate(AppScreens.DefinitionScreen.name)
                 }
-
             }
             Spacer(modifier = Modifier.height(120.dp))
-
         }
 
     }

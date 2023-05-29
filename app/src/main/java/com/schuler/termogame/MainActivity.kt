@@ -10,6 +10,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE
+import com.schuler.termogame.components.AdaptiveBanner
 import com.schuler.termogame.navigation.AppNavigation
 import com.schuler.termogame.screens.home.HomeViewModel
 import com.schuler.termogame.ui.theme.TermoGameTheme
@@ -31,6 +36,10 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(homeViewModel)
             }
         }
+        MobileAds.initialize(this)
+        val conf = RequestConfiguration.Builder()
+            .setTagForChildDirectedTreatment(TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE).build()
+        MobileAds.setRequestConfiguration(conf)
     }
 }
 
