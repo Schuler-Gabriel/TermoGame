@@ -28,6 +28,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.schuler.termogame.R
+import com.schuler.termogame.components.AdaptiveBanner
 import com.schuler.termogame.components.DialogWord
 import com.schuler.termogame.components.Keyboard
 
@@ -43,7 +44,13 @@ import java.text.Normalizer
 @Composable
 fun PlayScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
     val snackbarHostState = remember{ SnackbarHostState() }
-    Scaffold {
+    Scaffold(
+        bottomBar = {
+            BottomAppBar() {
+                AdaptiveBanner("ca-app-pub-3940256099942544/6300978111")
+            }
+        }
+    ) {
             GameContent(homeViewModel, snackbarHostState, navController)
     }
 }
@@ -63,7 +70,7 @@ fun GameContent(
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth(),
-        color = MaterialTheme.colors.background
+        color = MaterialTheme.colors.background,
     ) {
         Column {
             TopAppBar(
@@ -108,6 +115,8 @@ fun GameContent(
                     Box(){}
                 }
             }
+
+
 
             Column(
                 modifier = Modifier
