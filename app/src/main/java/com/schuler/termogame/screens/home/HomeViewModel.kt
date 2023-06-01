@@ -37,10 +37,10 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
     private val _difficulty = MutableStateFlow<Int>(0)
     val difficulty = _difficulty.asStateFlow()
 
-    private val _wins = MutableStateFlow<List<Float>>(listOf(0f,0f,0f,0f))
+    private val _wins = MutableStateFlow<MutableList<Float>>(mutableListOf(0f,0f,0f,0f))
     val wins = _wins.asStateFlow()
 
-    private val _losses = MutableStateFlow<List<Float>>(listOf(0f,0f,0f,0f))
+    private val _losses = MutableStateFlow<MutableList<Float>>(mutableListOf(0f,0f,0f,0f))
     val losses = _losses.asStateFlow()
 
     private val _randomWord = MutableStateFlow<Word>(Word("","",0,0))
@@ -115,16 +115,16 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
     }
 
     private val getWins = appContext.readString(KEY_WINS)
-    fun saveWins(wins: List<Int>){
+    private fun saveWins(wins: MutableList<Float>){
         viewModelScope.launch(Dispatchers.IO){
             appContext.writeString(KEY_WINS ,wins.joinToString(separator = "/"))
         }
     }
 
     private val getLosses = appContext.readString(KEY_LOSSES)
-    fun saveLosses(losses: List<Int>){
+    private fun saveLosses(losses: MutableList<Float>){
         viewModelScope.launch(Dispatchers.IO){
-            appContext.writeString(KEY_WINS ,losses.joinToString(separator = "/"))
+            appContext.writeString(KEY_LOSSES ,losses.joinToString(separator = "/"))
         }
     }
 
@@ -143,10 +143,10 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                             } catch (e: NumberFormatException) {
                                 0f
                             }
-                        }
+                        } as MutableList<Float>
                     } else {
                         appContext.writeString(KEY_WINS, "0/0/0/0")
-                        _wins.value = listOf(0f, 0f, 0f, 0f)
+                        _wins.value = mutableListOf(0f, 0f, 0f, 0f)
                     }
                 }
             }
@@ -161,10 +161,10 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                             } catch (e: NumberFormatException) {
                                 0f
                             }
-                        }
+                        } as MutableList<Float>
                     } else {
                         appContext.writeString(KEY_LOSSES, "0/0/0/0")
-                        _losses.value = listOf(0f, 0f, 0f, 0f)
+                        _losses.value = mutableListOf(0f, 0f, 0f, 0f)
                     }
                 }
             }
@@ -395,7 +395,17 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         return dictionary
     }
 
-    fun wordDialogFunction(){
+    fun wordDialogFunction(type: Boolean){
+        println("antes: " + _losses.value)
+        if(type){
+            _wins.value[_difficulty.value - 1] = _wins.value[_difficulty.value - 1] + 1
+            saveWins(_wins.value)
+        } else {
+            _losses.value[_difficulty.value - 1] = _losses.value[_difficulty.value - 1] + 1
+            println("depois: " + _losses.value)
+            saveLosses(_losses.value)
+        }
+        println("depois: " + _losses.value)
         reset()
     }
 

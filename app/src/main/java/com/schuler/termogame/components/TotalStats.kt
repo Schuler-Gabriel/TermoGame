@@ -49,6 +49,7 @@ fun TotalStats(
         for (i in wins.indices) {
             Total(legend = legend[i], matches = wins[i] + loses[i])
             Chart(proportions = if(wins[i] + loses[i] != 0f) wins[i]/(wins[i] + loses[i]) else 0f)
+
         }
         Row(
             modifier = Modifier
@@ -95,7 +96,7 @@ fun Total( legend: String, matches: Float, total: Boolean = false) {
 @Composable
 fun Chart(proportions: Float, total: Boolean = false) {
     val configuration = LocalConfiguration.current
-    val barWidth = configuration.screenWidthDp  * 0.9
+    val barWidth = configuration.screenWidthDp
     Row(
         modifier = Modifier
             .padding(10.dp, 5.dp, 10.dp, 10.dp)
@@ -105,7 +106,7 @@ fun Chart(proportions: Float, total: Boolean = false) {
     ) {
         Box(
             modifier = Modifier
-                .width(configuration.screenWidthDp.dp)
+                .width(barWidth.dp)
                 .height(25.dp)
                 .background(
                     color = MaterialTheme.colors.onSurface,
@@ -114,11 +115,15 @@ fun Chart(proportions: Float, total: Boolean = false) {
         ){
             Box(
                 modifier = Modifier
-                    .width(((barWidth * proportions) + configuration.screenWidthDp  * 0.1).dp)
+                    .width(
+                        (
+                                if(proportions < 0.12f) (barWidth  * 0.12)
+                                else barWidth * proportions
+                        ).toFloat().dp)
                     .height(25.dp)
                     .background(
                         color = if (total) MaterialTheme.colors.secondary else {
-                            if (proportions >= 0.5) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primary
+                            if (proportions >= 0.5) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
                         },
                         shape = RoundedCornerShape(13.dp)
                     ),

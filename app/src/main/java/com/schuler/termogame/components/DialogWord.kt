@@ -64,17 +64,17 @@ fun DialogWord (homeViewModel: HomeViewModel, type: Boolean){
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp)
                         ,
-                        onClick = { homeViewModel.wordDialogFunction() },
+                        onClick = { homeViewModel.wordDialogFunction(type) },
                         shape = RoundedCornerShape(15.dp),
                         border = BorderStroke(2.dp, color),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)
                     ) {
                         Text("OK")
                     }
-
                 }
             }
             Spacer(modifier = Modifier.height(100.dp))
+
         }
     }
 
