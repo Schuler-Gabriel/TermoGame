@@ -10,7 +10,9 @@ import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.schuler.termogame.dataStore.readInt
+import com.schuler.termogame.dataStore.readString
 import com.schuler.termogame.dataStore.writeInt
+import com.schuler.termogame.dataStore.writeString
 import com.schuler.termogame.model.GameData
 import com.schuler.termogame.model.Word
 import com.schuler.termogame.repository.AppRepository
@@ -34,6 +36,12 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
     private val _difficulty = MutableStateFlow<Int>(0)
     val difficulty = _difficulty.asStateFlow()
+
+    private val _wins = MutableStateFlow<List<Float>>(listOf(0f,0f,0f,0f))
+    val wins = _wins.asStateFlow()
+
+    private val _losses = MutableStateFlow<List<Float>>(listOf(0f,0f,0f,0f))
+    val losses = _losses.asStateFlow()
 
     private val _randomWord = MutableStateFlow<Word>(Word("","",0,0))
     val randomWord = _randomWord.asStateFlow()
@@ -101,14 +109,71 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
     //Data Store
 
     companion object{
-        const val KEY_NAME = "difficulty"
+        const val KEY_DIFFICULTY = "difficulty"
+        const val KEY_WINS = "wins"
+        const val KEY_LOSSES = "losses"
     }
 
-    private val getDifficulty = appContext.readInt(KEY_NAME)
+    private val getWins = appContext.readString(KEY_WINS)
+    fun saveWins(wins: List<Int>){
+        viewModelScope.launch(Dispatchers.IO){
+            appContext.writeString(KEY_WINS ,wins.joinToString(separator = "/"))
+        }
+    }
+
+    private val getLosses = appContext.readString(KEY_LOSSES)
+    fun saveLosses(losses: List<Int>){
+        viewModelScope.launch(Dispatchers.IO){
+            appContext.writeString(KEY_WINS ,losses.joinToString(separator = "/"))
+        }
+    }
+
+    private val getDifficulty = appContext.readInt(KEY_DIFFICULTY)
+
+    private fun initWinsAndLosses(){
+        viewModelScope.launch(Dispatchers.IO){
+            getWins.distinctUntilChanged().collect { wins ->
+                if (wins == null) {
+                    Log.d("Empty", ": Difficulty Empty")
+                } else {
+                    if (wins.length >= 7) {
+                        _wins.value = wins.split("/").map {
+                            try {
+                                it.toFloat()
+                            } catch (e: NumberFormatException) {
+                                0f
+                            }
+                        }
+                    } else {
+                        appContext.writeString(KEY_WINS, "0/0/0/0")
+                        _wins.value = listOf(0f, 0f, 0f, 0f)
+                    }
+                }
+            }
+            getLosses.distinctUntilChanged().collect { losses ->
+                if (losses == null) {
+                    Log.d("Empty", ": Difficulty Empty")
+                } else {
+                    if (losses.length >= 7) {
+                        _losses.value = losses.split("/").map {
+                            try {
+                                it.toFloat()
+                            } catch (e: NumberFormatException) {
+                                0f
+                            }
+                        }
+                    } else {
+                        appContext.writeString(KEY_LOSSES, "0/0/0/0")
+                        _losses.value = listOf(0f, 0f, 0f, 0f)
+                    }
+                }
+            }
+        }
+    }
 
     fun saveDifficulty(diff: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            appContext.writeInt(KEY_NAME, diff)
+            appContext.writeInt(KEY_DIFFICULTY, diff)
             _difficulty.value = diff
             reset()
 
@@ -161,73 +226,77 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         }
     }
 
+    private fun initGetDifficulty(){
+        viewModelScope.launch(Dispatchers.IO){
+            getDifficulty.distinctUntilChanged().collect {diff ->
+                println("diff: $diff")
+                if(diff == null){
+                    Log.d("Empty", ": Difficulty Empty")
+                } else {
+                    if(diff == 1 || diff == 2 || diff == 3 || diff == 4){
+                        _difficulty.value = diff
+
+                    } else {
+                        appContext.writeInt(KEY_DIFFICULTY, 4)
+                        _difficulty.value = 4
+                    }
+                    when (diff) {
+                        1 -> {
+                            repository.getRandomWord(93000000 ,97000).distinctUntilChanged()
+                                .collect{word ->
+                                    println(word)
+                                    if(word == null){
+                                        Log.d("Empty", ": Difficulty Empty")
+                                    } else {
+                                        _randomWord.value = word
+                                    }
+                                }
+                        }
+                        2 -> {
+                            repository.getRandomWord(450000,45000).distinctUntilChanged()
+                                .collect{word ->
+                                    println(word)
+                                    if(word == null){
+                                        Log.d("Empty", ": Difficulty Empty")
+                                    } else {
+                                        _randomWord.value = word
+                                    }
+                                }
+                        }
+                        3 ->{
+                            repository.getRandomWord(50000,3000).distinctUntilChanged()
+                                .collect{word ->
+                                    println(word)
+                                    if(word == null){
+                                        Log.d("Empty", ": Difficulty Empty")
+                                    } else {
+                                        _randomWord.value = word
+                                    }
+                                }
+                        }
+                        4 ->{
+                            repository.getRandomWord(93000000,9900).distinctUntilChanged()
+                                .collect{word ->
+                                    println(word)
+                                    if(word == null){
+                                        Log.d("Empty", ": Difficulty Empty")
+                                    } else {
+                                        _randomWord.value = word
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
     //When criate
     init {
-        viewModelScope.launch(Dispatchers.IO){
-            getDifficulty.distinctUntilChanged()
-                .collect {diff ->
-                    if(diff == null){
-                        Log.d("Empty", ": Difficulty Empty")
-                    } else {
-                        if(diff == 1 || diff == 2 || diff == 3 || diff == 4){
-                            _difficulty.value = diff
-
-                        } else {
-                            appContext.writeInt("difficulty", 4)
-                            _difficulty.value = 4
-                        }
-
-                        when (diff) {
-                            1 -> {
-                                repository.getRandomWord(93000000 ,97000).distinctUntilChanged()
-                                    .collect{word ->
-                                        println(word)
-                                        if(word == null){
-                                            Log.d("Empty", ": Difficulty Empty")
-                                        } else {
-                                            _randomWord.value = word
-                                        }
-                                    }
-                            }
-                            2 -> {
-                                repository.getRandomWord(450000,45000).distinctUntilChanged()
-                                    .collect{word ->
-                                        println(word)
-                                        if(word == null){
-                                            Log.d("Empty", ": Difficulty Empty")
-                                        } else {
-                                            _randomWord.value = word
-                                        }
-                                    }
-                            }
-                            3 ->{
-                                repository.getRandomWord(50000,3000).distinctUntilChanged()
-                                    .collect{word ->
-                                        println(word)
-                                        if(word == null){
-                                            Log.d("Empty", ": Difficulty Empty")
-                                        } else {
-                                            _randomWord.value = word
-                                        }
-                                    }
-                            }
-                            4 ->{
-                                repository.getRandomWord(93000000,9900).distinctUntilChanged()
-                                    .collect{word ->
-                                        println(word)
-                                        if(word == null){
-                                            Log.d("Empty", ": Difficulty Empty")
-                                        } else {
-                                            _randomWord.value = word
-                                        }
-                                    }
-                            }
-                        }
-                    }
-                }
-        }
+        initWinsAndLosses()
+        initGetDifficulty()
     }
 
     //Functions
@@ -273,6 +342,18 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
         activeLine.value = 0
         wordDialogRight.value = false
         wordDialogWrong.value = false
+    }
+    fun getGameData(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getGameData().distinctUntilChanged()
+                .collect { gameData ->
+                    if (gameData == null) {
+                        Log.d("Empty", ": Difficulty Empty")
+                    } else {
+                        _gameDataList.value = gameData
+                    }
+                }
+        }
     }
 
 

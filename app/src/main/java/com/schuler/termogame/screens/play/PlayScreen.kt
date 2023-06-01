@@ -45,9 +45,10 @@ import java.text.Normalizer
 fun PlayScreen(homeViewModel: HomeViewModel, navController: NavHostController) {
     val snackbarHostState = remember{ SnackbarHostState() }
     Scaffold(
+        backgroundColor = MaterialTheme.colors.background,
         bottomBar = {
             BottomAppBar() {
-                AdaptiveBanner("ca-app-pub-3940256099942544/6300978111")
+                AdaptiveBanner("ca-app-pub-9867287983655960/2649170219")
             }
         }
     ) {

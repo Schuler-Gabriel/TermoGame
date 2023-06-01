@@ -123,6 +123,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel() ){
             }
         ){
             StatsScreen(
+                homeViewModel,
                 navController = navController
             )
         }
