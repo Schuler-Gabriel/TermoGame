@@ -3,8 +3,8 @@ package com.schuler.termogame.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Blue = Color(0xFF6563ff)
-val Purple = Color(0xFFB132E7)
 val TransparentBlue = Color(0x666563FF)
+val Purple = Color(0xFFB132E7)
 val Green = Color(0xFF299F62)
 val TransparentGreen = Color(0x66299F62)
 val DarkGrey = Color(0xFF21252B)

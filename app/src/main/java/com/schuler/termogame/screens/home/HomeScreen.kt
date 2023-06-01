@@ -36,6 +36,7 @@ import kotlinx.coroutines.withContext
 fun HomeScreen(navController: NavHostController){
 
     Scaffold(
+        backgroundColor = MaterialTheme.colors.background,
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background,
@@ -53,7 +54,7 @@ fun HomeScreen(navController: NavHostController){
         },
         bottomBar = {
             BottomAppBar() {
-                AdaptiveBanner("ca-app-pub-3940256099942544/6300978111")
+                AdaptiveBanner("ca-app-pub-9867287983655960/2705010532")
             }
         }
     ){
