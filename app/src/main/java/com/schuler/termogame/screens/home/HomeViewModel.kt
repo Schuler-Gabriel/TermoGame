@@ -130,7 +130,7 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
     private val getDifficulty = appContext.readInt(KEY_DIFFICULTY)
 
-    private fun initWinsAndLosses(){
+    private fun initWins(){
         viewModelScope.launch(Dispatchers.IO){
             getWins.distinctUntilChanged().collect { wins ->
                 if (wins == null) {
@@ -150,6 +150,10 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
                     }
                 }
             }
+        }
+    }
+    private fun initLosses(){
+        viewModelScope.launch(Dispatchers.IO){
             getLosses.distinctUntilChanged().collect { losses ->
                 if (losses == null) {
                     Log.d("Empty", ": Difficulty Empty")
@@ -295,7 +299,8 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
     //When criate
     init {
-        initWinsAndLosses()
+        initWins()
+        initLosses()
         initGetDifficulty()
     }
 
