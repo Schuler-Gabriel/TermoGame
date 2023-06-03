@@ -1,7 +1,9 @@
 package com.schuler.termogame.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -16,11 +18,14 @@ fun AdaptiveBanner(
     adId: String,
     modifier: Modifier = Modifier,
 ) {
+
     val deviceCurrentWidth = LocalConfiguration.current.screenWidthDp
     val applicationContext = LocalContext.current.applicationContext
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.background),
     ) {
         AndroidView(
             modifier = Modifier.fillMaxWidth(),

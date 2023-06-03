@@ -60,7 +60,6 @@ fun SplashContent(alpha: Float){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
-
     ){
         Box(
             modifier = Modifier

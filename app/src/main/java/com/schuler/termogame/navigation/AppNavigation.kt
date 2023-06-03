@@ -63,7 +63,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel() ){
             }
         ){
             HomeScreen(
-
+                homeViewModel,
                 navController = navController
             )
         }

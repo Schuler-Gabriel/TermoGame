@@ -33,7 +33,7 @@ import kotlinx.coroutines.withContext
 
 
 @Composable
-fun HomeScreen(navController: NavHostController){
+fun HomeScreen(homeViewModel: HomeViewModel, navController: NavHostController){
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,

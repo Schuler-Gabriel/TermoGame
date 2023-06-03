@@ -48,6 +48,8 @@ class HomeViewModel @Inject constructor(private val repository: AppRepository, p
 
     private val _searchedWordExistes = MutableStateFlow<Boolean>(false)
 
+    var activeAds = mutableStateOf(false)
+
     var wordDialogRight = mutableStateOf(false)
 
     var wordDialogWrong = mutableStateOf(false)
