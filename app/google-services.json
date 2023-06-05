@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "943550354564",
+    "project_id": "administrador-655f5",
+    "storage_bucket": "administrador-655f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943550354564:android:69c5b7b8fb14475dc4ded1",
+        "android_client_info": {
+          "package_name": "com.schuler.termogame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943550354564-pp2ja76qre3d30298i2i6aq4ddipkav2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC0Gr0Bo-LP72H5zYPDIpTiHV2U8s2Gec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943550354564-pp2ja76qre3d30298i2i6aq4ddipkav2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
